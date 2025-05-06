@@ -53,7 +53,8 @@ class FlightData:
         params = {'airline': airline_input}
         QUERY_FLIGHT_BY_AIRLINE = sqlalchemy.text(
             'SELECT f.ID, f.ORIGIN_AIRPORT, f.DESTINATION_AIRPORT, a.AIRLINE, f.DEPARTURE_DELAY AS DELAY '
-            'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE a.AIRLINE = :airline')
+            'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE a.AIRLINE = :airline'
+            'WHERE DELAY >= 20')
         return self._execute_query(QUERY_FLIGHT_BY_AIRLINE, params)
 
 
@@ -61,7 +62,8 @@ class FlightData:
         params = {'airport': airport_input}
         QUERY_FLIGHT_BY_AIRPORT = sqlalchemy.text(
             'SELECT f.ID, f.ORIGIN_AIRPORT, f.DESTINATION_AIRPORT, a.AIRLINE, f.DEPARTURE_DELAY AS DELAY '
-            'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE f.ORIGIN_AIRPORT = :airport')
+            'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE f.ORIGIN_AIRPORT = :airport'
+            'WHERE DELAY >= 20')
         return self._execute_query(QUERY_FLIGHT_BY_AIRPORT, params)
 
     def __del__(self):

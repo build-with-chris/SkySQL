@@ -96,7 +96,7 @@ def print_results(results):
             return
 
         # Different prints for delayed and non-delayed flights
-        if delay and delay > 20:
+        if delay and delay > 0:
             print(f"{result['ID']}. {origin} -> {dest} by {airline}, Delay: {delay} Minutes")
         else:
             print(f"{result['ID']}. {origin} -> {dest} by {airline}")
