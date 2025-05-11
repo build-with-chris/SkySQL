@@ -1,7 +1,9 @@
 import sqlalchemy
 from sqlalchemy import create_engine, text
 
-QUERY_FLIGHT_BY_ID = "SELECT flights.*, airlines.airline, flights.ID as FLIGHT_ID, flights.DEPARTURE_DELAY as DELAY FROM flights JOIN airlines ON flights.airline = airlines.id WHERE flights.ID = :id"
+QUERY_FLIGHT_BY_ID = ("SELECT flights.*, airlines.airline, flights.ID as FLIGHT_ID, "
+                      "flights.DEPARTURE_DELAY as DELAY FROM flights JOIN airlines ON "
+                      "flights.airline = airlines.id WHERE flights.ID = :id")
 
 
 class FlightData:
@@ -37,15 +39,18 @@ class FlightData:
         """
         params = {'id': flight_id}
         QUERY_FLIGHT_BY_ID = sqlalchemy.text(
-            'SELECT f.ID, f.ORIGIN_AIRPORT, f.DESTINATION_AIRPORT, a.AIRLINE, f.DEPARTURE_DELAY AS DELAY '
+            'SELECT f.ID, f.ORIGIN_AIRPORT, f.DESTINATION_AIRPORT, a.AIRLINE, '
+            'f.DEPARTURE_DELAY AS DELAY '
             'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE f.ID = :id')
         return self._execute_query(QUERY_FLIGHT_BY_ID, params)
 
     def get_flights_by_date(self, day, month, year):
         params = {'day': day, 'month': month, 'year': year}
-        QUERY_FLIGHT_BY_DATE = sqlalchemy.text('SELECT f.ID, f.ORIGIN_AIRPORT, f.DESTINATION_AIRPORT, a.AIRLINE, f.DEPARTURE_DELAY AS DELAY '
-                                               'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID '
-                                               'WHERE f.DAY = :day AND f.MONTH = :month AND f.YEAR = :year')
+        QUERY_FLIGHT_BY_DATE = sqlalchemy.text(
+            'SELECT f.ID, f.ORIGIN_AIRPORT, f.DESTINATION_AIRPORT, a.AIRLINE, '
+            'f.DEPARTURE_DELAY AS DELAY FROM flights AS f JOIN airlines AS a '
+            'ON f.AIRLINE = a.ID WHERE f.DAY = :day AND f.MONTH = :month '
+            'AND f.YEAR = :year')
         return self._execute_query(QUERY_FLIGHT_BY_DATE, params)
 
 
@@ -53,8 +58,8 @@ class FlightData:
         params = {'airline': airline_input}
         QUERY_FLIGHT_BY_AIRLINE = sqlalchemy.text(
             'SELECT f.ID, f.ORIGIN_AIRPORT, f.DESTINATION_AIRPORT, a.AIRLINE, f.DEPARTURE_DELAY AS DELAY '
-            'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE a.AIRLINE = :airline'
-            'WHERE DELAY >= 20')
+            'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE a.AIRLINE = :airline '
+            'AND DELAY >= 20')
         return self._execute_query(QUERY_FLIGHT_BY_AIRLINE, params)
 
 
@@ -62,8 +67,8 @@ class FlightData:
         params = {'airport': airport_input}
         QUERY_FLIGHT_BY_AIRPORT = sqlalchemy.text(
             'SELECT f.ID, f.ORIGIN_AIRPORT, f.DESTINATION_AIRPORT, a.AIRLINE, f.DEPARTURE_DELAY AS DELAY '
-            'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE f.ORIGIN_AIRPORT = :airport'
-            'WHERE DELAY >= 20')
+            'FROM flights AS f JOIN airlines AS a ON f.AIRLINE = a.ID WHERE f.ORIGIN_AIRPORT = :airport '
+            'AND DELAY >= 20')
         return self._execute_query(QUERY_FLIGHT_BY_AIRPORT, params)
 
     def __del__(self):
